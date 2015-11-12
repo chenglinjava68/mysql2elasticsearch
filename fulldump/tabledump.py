@@ -1,11 +1,11 @@
 #coding:utf8
-# Author: zh3linux(zenghuashan)
+# Author: zh3linux(zh3linux@gmail.com)
 
 '''
-# 全量数据导入 --> qing_group 表 和 qing_customer_group
+# 全量数据导入
 
 直接通过for循环表的min(fileid)-->max(fileid)，
-从最小fileid到某时刻最大fileid，一个个从MySQL中读出来，
+
 组成ES-Docs并写入ES。
 '''
 import sys, os

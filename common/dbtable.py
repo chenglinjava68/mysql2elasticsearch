@@ -1,5 +1,5 @@
 #coding:utf8
-# Author: zh3linux(zenghuashan)
+# Author: zh3linux(zh3linux@gmail.com)
 
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))

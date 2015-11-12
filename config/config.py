@@ -1,5 +1,5 @@
 #coding:utf8
-# Author: zh3linux(zenghuashan)
+# Author: zh3linux(zh3linux@gmail.com)
 
 import yaml, os
 from attrdict import AttrDict
