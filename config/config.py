@@ -3,7 +3,7 @@
 
 import yaml, os
 from attrdict import AttrDict
-CONFIGFILE = '/etc/esdump.conf'
+CONFIGFILE = '/etc/mysql2es.conf'
 rootPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 if not os.path.isfile(CONFIGFILE):

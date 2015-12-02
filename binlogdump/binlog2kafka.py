@@ -42,6 +42,7 @@ class SyncBinlog():
                 elif isinstance(binlogevent, UpdateRowsEvent):
                     row['db_rows_event'] = 'UPDATE'
                     row['values'] = row.pop('after_values')
+                    row['before_values'] = self.nil2null(row['before_values'])
                 elif isinstance(binlogevent, WriteRowsEvent):
                     row['db_rows_event'] = 'WRITE'
 
@@ -61,17 +62,34 @@ class SyncBinlog():
                 row['@timestamp'] = ltime
                 row['db_binlog_file'] = self.current_binlog
                 row['db_binlog_pos'] = binlogevent.packet.log_pos
-
+                
+                row['values'] = self.nil2null(row['values'])
                 data = self.fmtjson(row)
                 print data
                 kfk.producer(topic, data)
+
+    def nil2null(self, data):
+        try:
+            res = {}
+            for k, v in data.iteritems(): 
+                res[k] = v 
+                if v == '':
+                    res[k] = 'null'
+                elif isinstance(v, bytes):
+                    try:
+                        json.dumps(v)
+                    except:
+                        res[k] = v.encode('hex')
+            return res
+        except:
+            return data
 
     def fmtjson(self, row):
         try:
             return json.dumps(row, encoding='utf-8')
         except:
             for k, v in row.iteritems():
-                if k == '@timestamp': continue
+                if k in ['@timestamp', 'db_rows_event', 'db_type', 'db_name']: continue
                 elif isinstance(v, bytes):
                     row[k] = v.encode('hex')
                 elif isinstance(v, dict):

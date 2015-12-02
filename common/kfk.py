@@ -15,6 +15,7 @@ class KFK():
         client = KafkaClient("%s:%s" %(config.kafka.host, config.kafka.port))
         print "%s:%s" %(config.kafka.host, config.kafka.port)
         self.simpleproducer = SimpleProducer(client)
+        self.leaderr = 0
 
 
     def producer(self, topic, msg):
@@ -25,8 +26,14 @@ class KFK():
             self.simpleproducer.send_messages(topic, msg)
         except LeaderNotAvailableError:
             time.sleep(1)
-            print "LeaderNotAvailableError"
-            self.simpleproducer.send_messages(topic, msg)
+            print "LeaderNotAvailableError", topic, msg
+            self.leaderr += 1
+            if self.leaderr > 5:
+                self.producer(topic, msg)
+            else:
+                self.leaderr = 0
+                return 
+#            self.simpleproducer.send_messages(topic, msg)
 
 kfk = KFK()
 
